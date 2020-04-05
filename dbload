@@ -1,3 +1,223 @@
 public class dbload {
 
 }
+
+
+//PropertyDetails Class
+public class propertyDetails {
+	private int censusYear;
+	private String blockId;
+	private int propertyId;
+	private int basePropertyId;
+	private String buildingName;
+	private String streetAddress;
+	private String suburb;
+	private int constructionYear;
+	private int refurbishedYear;
+	private int buildingHeightHighestFloor;
+	private String predominantSpaceUse;
+	private String accessibilityType;
+	private String accessibilityTypeDescription;
+	private int accessibilityRating;
+	private int bicycleSpaces;
+	private String hasShowers;
+	private float xCoordinate;
+	private float yCoordinate;
+	private String location;
+	
+	public propertyDetails() {
+		
+	}
+	
+	public propertyDetails(int censusYear, String blockId, int propertyId, int basePropertyId, String buildingName,
+			String streetAddress, String suburb, int constructionYear, int refurbishedYear,
+			int buildingHeightHighestFloor, String predominantSpaceUse, String accessibilityType,
+			String accessibilityTypeDescription, int accessibilityRating, int bicycleSpaces, String hasShowers,
+			float xCoordinate, float yCoordinate, String location) {
+		super();
+		this.censusYear = censusYear;
+		this.blockId = blockId;
+		this.propertyId = propertyId;
+		this.basePropertyId = basePropertyId;
+		this.buildingName = buildingName;
+		this.streetAddress = streetAddress;
+		this.suburb = suburb;
+		this.constructionYear = constructionYear;
+		this.refurbishedYear = refurbishedYear;
+		this.buildingHeightHighestFloor = buildingHeightHighestFloor;
+		this.predominantSpaceUse = predominantSpaceUse;
+		this.accessibilityType = accessibilityType;
+		this.accessibilityTypeDescription = accessibilityTypeDescription;
+		this.accessibilityRating = accessibilityRating;
+		this.bicycleSpaces = bicycleSpaces;
+		this.hasShowers = hasShowers;
+		this.xCoordinate = xCoordinate;
+		this.yCoordinate = yCoordinate;
+		this.location = location;
+	}
+
+	public int getCensusYear() {
+		return censusYear;
+	}
+
+	public void setCensusYear(int censusYear) {
+		this.censusYear = censusYear;
+	}
+
+	public String getBlockId() {
+		return blockId;
+	}
+
+	public void setBlockId(String blockId) {
+		this.blockId = blockId;
+	}
+
+	public int getPropertyId() {
+		return propertyId;
+	}
+
+	public void setPropertyId(int propertyId) {
+		this.propertyId = propertyId;
+	}
+
+	public int getBasePropertyId() {
+		return basePropertyId;
+	}
+
+	public void setBasePropertyId(int basePropertyId) {
+		this.basePropertyId = basePropertyId;
+	}
+
+	public String getBuildingName() {
+		return buildingName;
+	}
+
+	public void setBuildingName(String buildingName) {
+		this.buildingName = buildingName;
+	}
+
+	public String getStreetAddress() {
+		return streetAddress;
+	}
+
+	public void setStreetAddress(String streetAddress) {
+		this.streetAddress = streetAddress;
+	}
+
+	public String getSuburb() {
+		return suburb;
+	}
+
+	public void setSuburb(String suburb) {
+		this.suburb = suburb;
+	}
+
+	public int getConstructionYear() {
+		return constructionYear;
+	}
+
+	public void setConstructionYear(int constructionYear) {
+		this.constructionYear = constructionYear;
+	}
+
+	public int getRefurbishedYear() {
+		return refurbishedYear;
+	}
+
+	public void setRefurbishedYear(int refurbishedYear) {
+		this.refurbishedYear = refurbishedYear;
+	}
+
+	public int getBuildingHeightHighestFloor() {
+		return buildingHeightHighestFloor;
+	}
+
+	public void setBuildingHeightHighestFloor(int buildingHeightHighestFloor) {
+		this.buildingHeightHighestFloor = buildingHeightHighestFloor;
+	}
+
+	public String getPredominantSpaceUse() {
+		return predominantSpaceUse;
+	}
+
+	public void setPredominantSpaceUse(String predominantSpaceUse) {
+		this.predominantSpaceUse = predominantSpaceUse;
+	}
+
+	public String getAccessibilityType() {
+		return accessibilityType;
+	}
+
+	public void setAccessibilityType(String accessibilityType) {
+		this.accessibilityType = accessibilityType;
+	}
+
+	public String getAccessibilityTypeDescription() {
+		return accessibilityTypeDescription;
+	}
+
+	public void setAccessibilityTypeDescription(String accessibilityTypeDescription) {
+		this.accessibilityTypeDescription = accessibilityTypeDescription;
+	}
+
+	public int getAccessibilityRating() {
+		return accessibilityRating;
+	}
+
+	public void setAccessibilityRating(int accessibilityRating) {
+		this.accessibilityRating = accessibilityRating;
+	}
+
+	public int getBicycleSpaces() {
+		return bicycleSpaces;
+	}
+
+	public void setBicycleSpaces(int bicycleSpaces) {
+		this.bicycleSpaces = bicycleSpaces;
+	}
+
+	public String getHasShowers() {
+		return hasShowers;
+	}
+
+	public void setHasShowers(String hasShowers) {
+		this.hasShowers = hasShowers;
+	}
+
+	public float getxCoordinate() {
+		return xCoordinate;
+	}
+
+	public void setxCoordinate(float xCoordinate) {
+		this.xCoordinate = xCoordinate;
+	}
+
+	public float getyCoordinate() {
+		return yCoordinate;
+	}
+
+	public void setyCoordinate(float yCoordinate) {
+		this.yCoordinate = yCoordinate;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	@Override
+	public String toString() {
+		return "propertyDetails [censusYear=" + censusYear + ", blockId=" + blockId + ", propertyId=" + propertyId
+				+ ", basePropertyId=" + basePropertyId + ", buildingName=" + buildingName + ", streetAddress="
+				+ streetAddress + ", suburb=" + suburb + ", constructionYear=" + constructionYear + ", refurbishedYear="
+				+ refurbishedYear + ", buildingHeightHighestFloor=" + buildingHeightHighestFloor
+				+ ", predominantSpaceUse=" + predominantSpaceUse + ", accessibilityType=" + accessibilityType
+				+ ", accessibilityTypeDescription=" + accessibilityTypeDescription + ", accessibilityRating="
+				+ accessibilityRating + ", bicycleSpaces=" + bicycleSpaces + ", hasShowers=" + hasShowers
+				+ ", xCoordinate=" + xCoordinate + ", yCoordinate=" + yCoordinate + ", location=" + location + "]";
+	}
+
+}
