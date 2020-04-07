@@ -1,0 +1,82 @@
+import java.io.DataInputStream;
+import java.io.EOFException;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class dbquery {
+	
+	DataInputStream dataInput;
+
+	public static void main(String[] args) throws IOException {
+		if (args.length < 2) {
+            System.out.println("Please provide building name and pagesize.");
+            System.exit(0);
+        }
+		//declare variables from command line inputs
+		String buildingName = args[0];
+		String inputFile = "C:\\Users\\Romwell Morales\\eclipse-workspace-2020\\database\\"+"heap."+args[1];
+        
+        dbquery reader = new dbquery(inputFile);
+        List<propertyDetails> listProperty = reader.readAll();
+        
+        long startTime = System.nanoTime();
+        //loop through the input file
+        for (propertyDetails p:listProperty) {
+        	//find matches with building name
+        	if(p.getBuildingName().toLowerCase().equals(buildingName.toLowerCase())) {
+        		System.out.println(p);
+        	}
+        }
+        long endTime = System.nanoTime();
+        long timeElapsed = endTime - startTime;
+        System.out.println("Execution time in milliseconds : " + timeElapsed / 1000000);
+	}
+	
+    public dbquery(String input) throws IOException {
+        dataInput = new DataInputStream(new FileInputStream(input));
+    }
+ 
+    public List<propertyDetails> readAll() throws IOException {
+        List<propertyDetails> listProperty = new ArrayList<>();
+ 
+        try {
+            while (true) {
+            	int censusYear = dataInput.readInt();
+            	int blockId = dataInput.readInt();
+            	int propertyId = dataInput.readInt();
+            	int basePropertyId = dataInput.readInt();
+            	String buildingName = dataInput.readUTF();
+            	String streetAddress = dataInput.readUTF();
+            	String suburb = dataInput.readUTF();
+            	int constructionYear = dataInput.readInt();
+            	int refurbishedYear = dataInput.readInt();
+            	int buildingHeightHighestFloor = dataInput.readInt();
+            	String predominantSpaceUse = dataInput.readUTF();
+            	String accessibilityType = dataInput.readUTF();
+            	String accessibilityTypeDescription = dataInput.readUTF();
+            	int accessibilityRating = dataInput.readInt();
+            	int bicycleSpaces = dataInput.readInt();
+            	String hasShowers = dataInput.readUTF();
+            	float xCoordinate = dataInput.readFloat();
+            	float yCoordinate = dataInput.readFloat();
+            	String location = dataInput.readUTF();
+ 
+                propertyDetails property = new propertyDetails ( censusYear,  blockId,  propertyId,  basePropertyId,  buildingName,
+           			 streetAddress,  suburb,  constructionYear,  refurbishedYear,
+        			 buildingHeightHighestFloor,  predominantSpaceUse,  accessibilityType,
+        			 accessibilityTypeDescription,  accessibilityRating,  bicycleSpaces,  hasShowers,
+        			 xCoordinate,  yCoordinate,  location);
+                listProperty.add(property);
+            }
+        } catch (EOFException ex) {
+            // reach end of file
+        }
+ 
+        dataInput.close();
+ 
+        return listProperty;
+    }
+	
+}
