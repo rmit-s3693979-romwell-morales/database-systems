@@ -1,223 +1,158 @@
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
 public class dbload {
-
-}
-
-
-//PropertyDetails Class
-public class propertyDetails {
-	private int censusYear;
-	private String blockId;
-	private int propertyId;
-	private int basePropertyId;
-	private String buildingName;
-	private String streetAddress;
-	private String suburb;
-	private int constructionYear;
-	private int refurbishedYear;
-	private int buildingHeightHighestFloor;
-	private String predominantSpaceUse;
-	private String accessibilityType;
-	private String accessibilityTypeDescription;
-	private int accessibilityRating;
-	private int bicycleSpaces;
-	private String hasShowers;
-	private float xCoordinate;
-	private float yCoordinate;
-	private String location;
 	
-	public propertyDetails() {
-		
-	}
-	
-	public propertyDetails(int censusYear, String blockId, int propertyId, int basePropertyId, String buildingName,
-			String streetAddress, String suburb, int constructionYear, int refurbishedYear,
-			int buildingHeightHighestFloor, String predominantSpaceUse, String accessibilityType,
-			String accessibilityTypeDescription, int accessibilityRating, int bicycleSpaces, String hasShowers,
-			float xCoordinate, float yCoordinate, String location) {
-		super();
-		this.censusYear = censusYear;
-		this.blockId = blockId;
-		this.propertyId = propertyId;
-		this.basePropertyId = basePropertyId;
-		this.buildingName = buildingName;
-		this.streetAddress = streetAddress;
-		this.suburb = suburb;
-		this.constructionYear = constructionYear;
-		this.refurbishedYear = refurbishedYear;
-		this.buildingHeightHighestFloor = buildingHeightHighestFloor;
-		this.predominantSpaceUse = predominantSpaceUse;
-		this.accessibilityType = accessibilityType;
-		this.accessibilityTypeDescription = accessibilityTypeDescription;
-		this.accessibilityRating = accessibilityRating;
-		this.bicycleSpaces = bicycleSpaces;
-		this.hasShowers = hasShowers;
-		this.xCoordinate = xCoordinate;
-		this.yCoordinate = yCoordinate;
-		this.location = location;
-	}
+	DataOutputStream dataOutput;
 
-	public int getCensusYear() {
-		return censusYear;
-	}
+	public static void main(String[] args) throws IOException {
+		if (args.length < 2) {
+            System.out.println("Please provide pagesize and datafile");
+            System.exit(0);
+        }
+		//declare variables from command line inputs
+		int pageSize = Integer.parseInt(args[0]);
+        String inputFile = args[1];
+        String outputFile = "heap."+args[0];
+        
+              
+        List<propertyDetails> listProperty = readFromCsv(inputFile);
+        dbload load = new dbload(outputFile);
+  
+//        byte[] buffer = new byte[pageSize];
+        
+        
+        long startTime = System.nanoTime();
+        //read all records from the listProperty list
+        for (propertyDetails p:listProperty) {
+        	load.writeProperty(p);        	
+        }
+        long endTime = System.nanoTime();
+        long timeElapsed = endTime - startTime;
+        int numberOfPage = listProperty.size()/(pageSize/500);
+        System.out.println("Number of records loaded: "+listProperty.size());
+        System.out.println("Number of pages used: "+numberOfPage);
+        System.out.println("Execution time in milliseconds : " + timeElapsed / 1000000);
+        
+	}	
+    	
+    private static List<propertyDetails> readFromCsv(String filename) throws IOException{
+    	//create a list of propertyDetails object from the CSV file
+        List<propertyDetails> listProperty = new ArrayList<>();
+        Path pathToFile = Paths.get(filename);
+        BufferedReader br = Files.newBufferedReader(pathToFile, StandardCharsets.US_ASCII);
+        //skip header
+        br.readLine();
+        //read first line
+        String line = br.readLine();
+        //loop through all the lines
+        while(line!=null) {
+        	//split the lines into different fields
+        	String [] fields = line.split(",(?=([^\"]|\"[^\"]*\")*$)",-1);
+        	propertyDetails pD = createProperty(fields);
+        	//add object into array list
+        	listProperty.add(pD);
+        	//read next line
+        	line = br.readLine();
+        }
+        return listProperty;
+    }
+        
+    private static propertyDetails createProperty(String[] column) {
+    	//catch and replace null values
+    	int censusYear=0;
+    	int blockId=0;
+    	int propertyId=0;
+    	int basePropertyId=0;
+    	int constructionYear=0;
+    	int refurbishedYear=0;
+    	int buildingHeightHighestFloor=0;
+    	int accessibilityRating=0;
+    	int bicycleSpaces=0;
+    	float xCoordinate=0;
+    	float yCoordinate=0;
+    	
+		if (!column[0].isEmpty()) {
+			censusYear = Integer.parseInt(column[0]);
+		}
+		if (!column[1].isEmpty()) {
+			blockId = Integer.parseInt(column[1]);
+		}
+		if (!column[2].isEmpty()) {
+			propertyId = Integer.parseInt(column[2]);
+		}
+		if (!column[3].isEmpty()) {
+			basePropertyId = Integer.parseInt(column[3]);
+		}
+    	String buildingName = column[4];
+    	String streetAddress = column[5];
+    	String suburb = column[6];
+		if (!column[7].isEmpty()) {
+			constructionYear = Integer.parseInt(column[7]);
+		}
+		if (!column[8].isEmpty()) {
+			refurbishedYear = Integer.parseInt(column[8]);
+		}
+		if (!column[9].isEmpty()) {
+			buildingHeightHighestFloor = Integer.parseInt(column[9]);
+		}
+    	String predominantSpaceUse = column[10];
+    	String accessibilityType = column[11];
+    	String accessibilityTypeDescription = column[12];
+		if (!column[13].isEmpty()) {
+			accessibilityRating = Integer.parseInt(column[13]);
+		}
+		if (!column[14].isEmpty()) {
+			bicycleSpaces = Integer.parseInt(column[14]);
+		}
+    	String hasShowers = column[15];
+		if (!column[16].isEmpty()) {
+			xCoordinate = Float.parseFloat(column[16]);
+		}
+		if (!column[17].isEmpty()) {
+			yCoordinate = Float.parseFloat(column[17]);
+		}
+    	String location = column[18];
+    	
+    	return new propertyDetails ( censusYear,  blockId,  propertyId,  basePropertyId,  buildingName,
+    			 streetAddress,  suburb,  constructionYear,  refurbishedYear,
+    			 buildingHeightHighestFloor,  predominantSpaceUse,  accessibilityType,
+    			 accessibilityTypeDescription,  accessibilityRating,  bicycleSpaces,  hasShowers,
+    			 xCoordinate,  yCoordinate, location);
+    }
+    
+    public dbload(String outputFile) throws IOException {
+        dataOutput = new DataOutputStream(new FileOutputStream(outputFile));
+    }
 
-	public void setCensusYear(int censusYear) {
-		this.censusYear = censusYear;
-	}
-
-	public String getBlockId() {
-		return blockId;
-	}
-
-	public void setBlockId(String blockId) {
-		this.blockId = blockId;
-	}
-
-	public int getPropertyId() {
-		return propertyId;
-	}
-
-	public void setPropertyId(int propertyId) {
-		this.propertyId = propertyId;
-	}
-
-	public int getBasePropertyId() {
-		return basePropertyId;
-	}
-
-	public void setBasePropertyId(int basePropertyId) {
-		this.basePropertyId = basePropertyId;
-	}
-
-	public String getBuildingName() {
-		return buildingName;
-	}
-
-	public void setBuildingName(String buildingName) {
-		this.buildingName = buildingName;
-	}
-
-	public String getStreetAddress() {
-		return streetAddress;
-	}
-
-	public void setStreetAddress(String streetAddress) {
-		this.streetAddress = streetAddress;
-	}
-
-	public String getSuburb() {
-		return suburb;
-	}
-
-	public void setSuburb(String suburb) {
-		this.suburb = suburb;
-	}
-
-	public int getConstructionYear() {
-		return constructionYear;
-	}
-
-	public void setConstructionYear(int constructionYear) {
-		this.constructionYear = constructionYear;
-	}
-
-	public int getRefurbishedYear() {
-		return refurbishedYear;
-	}
-
-	public void setRefurbishedYear(int refurbishedYear) {
-		this.refurbishedYear = refurbishedYear;
-	}
-
-	public int getBuildingHeightHighestFloor() {
-		return buildingHeightHighestFloor;
-	}
-
-	public void setBuildingHeightHighestFloor(int buildingHeightHighestFloor) {
-		this.buildingHeightHighestFloor = buildingHeightHighestFloor;
-	}
-
-	public String getPredominantSpaceUse() {
-		return predominantSpaceUse;
-	}
-
-	public void setPredominantSpaceUse(String predominantSpaceUse) {
-		this.predominantSpaceUse = predominantSpaceUse;
-	}
-
-	public String getAccessibilityType() {
-		return accessibilityType;
-	}
-
-	public void setAccessibilityType(String accessibilityType) {
-		this.accessibilityType = accessibilityType;
-	}
-
-	public String getAccessibilityTypeDescription() {
-		return accessibilityTypeDescription;
-	}
-
-	public void setAccessibilityTypeDescription(String accessibilityTypeDescription) {
-		this.accessibilityTypeDescription = accessibilityTypeDescription;
-	}
-
-	public int getAccessibilityRating() {
-		return accessibilityRating;
-	}
-
-	public void setAccessibilityRating(int accessibilityRating) {
-		this.accessibilityRating = accessibilityRating;
-	}
-
-	public int getBicycleSpaces() {
-		return bicycleSpaces;
-	}
-
-	public void setBicycleSpaces(int bicycleSpaces) {
-		this.bicycleSpaces = bicycleSpaces;
-	}
-
-	public String getHasShowers() {
-		return hasShowers;
-	}
-
-	public void setHasShowers(String hasShowers) {
-		this.hasShowers = hasShowers;
-	}
-
-	public float getxCoordinate() {
-		return xCoordinate;
-	}
-
-	public void setxCoordinate(float xCoordinate) {
-		this.xCoordinate = xCoordinate;
-	}
-
-	public float getyCoordinate() {
-		return yCoordinate;
-	}
-
-	public void setyCoordinate(float yCoordinate) {
-		this.yCoordinate = yCoordinate;
-	}
-
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
-	@Override
-	public String toString() {
-		return "propertyDetails [censusYear=" + censusYear + ", blockId=" + blockId + ", propertyId=" + propertyId
-				+ ", basePropertyId=" + basePropertyId + ", buildingName=" + buildingName + ", streetAddress="
-				+ streetAddress + ", suburb=" + suburb + ", constructionYear=" + constructionYear + ", refurbishedYear="
-				+ refurbishedYear + ", buildingHeightHighestFloor=" + buildingHeightHighestFloor
-				+ ", predominantSpaceUse=" + predominantSpaceUse + ", accessibilityType=" + accessibilityType
-				+ ", accessibilityTypeDescription=" + accessibilityTypeDescription + ", accessibilityRating="
-				+ accessibilityRating + ", bicycleSpaces=" + bicycleSpaces + ", hasShowers=" + hasShowers
-				+ ", xCoordinate=" + xCoordinate + ", yCoordinate=" + yCoordinate + ", location=" + location + "]";
+	private void writeProperty(propertyDetails p) throws IOException {
+		  dataOutput.writeInt(p.getCensusYear());
+		  dataOutput.writeInt(p.getBlockId());
+		  dataOutput.writeInt(p.getPropertyId());
+		  dataOutput.writeInt(p.getBasePropertyId());
+		  dataOutput.writeUTF(p.getBuildingName());
+		  dataOutput.writeUTF(p.getStreetAddress());
+		  dataOutput.writeUTF(p.getSuburb());
+		  dataOutput.writeInt(p.getConstructionYear());
+		  dataOutput.writeInt(p.getRefurbishedYear());
+		  dataOutput.writeInt(p.getBuildingHeightHighestFloor());
+		  dataOutput.writeUTF(p.getPredominantSpaceUse());
+		  dataOutput.writeUTF(p.getAccessibilityType());
+		  dataOutput.writeUTF(p.getAccessibilityTypeDescription());
+		  dataOutput.writeInt(p.getAccessibilityRating());
+		  dataOutput.writeInt(p.getBicycleSpaces());
+		  dataOutput.writeUTF(p.getHasShowers());
+		  dataOutput.writeFloat(p.getxCoordinate());
+		  dataOutput.writeFloat(p.getyCoordinate());
+		  dataOutput.writeUTF(p.getLocation());
 	}
 
 }
